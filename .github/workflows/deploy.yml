@@ -20,10 +20,15 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << EOF
             cd /www/wwwroot/
+            echo "Pull latest code..."
             git pull origin main
-            composer install --no-dev
+            echo "Install composer dependencies..."
+            composer install --no-dev --no-interaction --prefer-dist
+            echo "Run migrations..."
             php artisan migrate --force
-            systemctl restart php-fpm
+            echo "Restart PHP-FPM..."
+            sudo systemctl restart php-fpm
+            echo "Deployment finished."
           EOF
