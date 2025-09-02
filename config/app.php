@@ -24,3 +24,5 @@ return [
     'controller_suffix' => 'Controller',
     'controller_reuse' => false,
 ];
+
+
